@@ -23,6 +23,8 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
 
 </head>
 
@@ -31,33 +33,37 @@
 
 
     function getSurvey() {
-        window.location = "/survey/getSurvey";
-        /*
-        var question = $('#questions');
+
         $.ajax({
             type: "GET",
             url: "/survey/getSurvey",
-            success: function (data) {
-                alert("success");
-                var output = "<p>" + data['surveyName'] + "</p>";
-                question.html(output);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert("error");
+            statusCode: {
+                200: function () {
+                    window.location = "/survey/getSurvey";
+                },
+                400: function () {
+                    alert("Survey Expired");
+                }
+
             }
-        });*/
+        });
+
+        // window.location = "/survey/getSurvey";
+
     }
 
 
 </script>
 
 <body>
-<div>
-    <p>Welcome</p>
-    <button type="submit" onclick="getSurvey()">Take Survey</button>
 
-    <div id="questions"></div>
+    <div>
+        <button class="btn btn-primary" type="submit" onclick="getSurvey()" style="display: block; margin: 0 auto">Take Survey</button>
 
-</div>
+        <div id="questions"></div>
+    </div>
+
+
+
 </body>
 </html>

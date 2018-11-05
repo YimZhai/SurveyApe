@@ -20,8 +20,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
 
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
-          integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+    <%--<link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"--%>
+          <%--integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">--%>
+    <%----%>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!--
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    -->
 </head>
 
 <script>
@@ -39,32 +46,40 @@
             }
         });
 
-        var question_name = 1;
+        function uuidv4() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        var question_name = "question_" + uuidv4();
         function submitQuestion() {
 
-            var question = {
-                title: document.getElementById("questionTitle").value,
-                type: document.getElementById("surveyType").value,
-                name: question_name,
-                choices: [
-                    document.getElementById("choice1").value,
-                    document.getElementById("choice2").value,
-                    document.getElementById("choice3").value,
-                    document.getElementById("choice4").value
-                ]
-            };
-
-            /*
-            {"title":"Choose a color",
-            "name":"1",
-            "type":"checkbox",
-            "choices":[
-            "red",
-            "blue",
-            "yellow",
-            "white"]
+            if (document.getElementById("surveyType").value == "rating"){
+                console.log("inside rating")
+                var question = {
+                    title: document.getElementById("questionTitle").value,
+                    type: "barrating",
+                    name: question_name,
+                    ratingTheme: "fontawesome-stars",
+                    choices: ["1", "2", "3", "4", "5"]
+                };
             }
-             */
+            else {
+                var question = {
+                    title: document.getElementById("questionTitle").value,
+                    type: document.getElementById("surveyType").value,
+                    name: question_name,
+                    choices: [
+                        document.getElementById("choice1").value,
+                        document.getElementById("choice2").value,
+                        document.getElementById("choice3").value,
+                        document.getElementById("choice4").value
+                    ]
+                };
+            }
+
 
             $.ajax({
                 type: "POST",
@@ -82,18 +97,6 @@
                 statusCode : {
                     200 : function() {
                         window.location = '/account/createsurvey';
-                    },
-                    400 : function() {
-                        console.log(errorMsg);
-                    },
-                    500 : function() {
-
-                    },
-                    404 : function() {
-
-
-                    },
-                    409 : function() {
                     }
                 },
                 complete : function(e) {
@@ -126,17 +129,6 @@
             statusCode : {
                 201 : function() {
                     window.location = '/account/createsurvey';
-                },
-                400 : function() {
-
-                },
-                500 : function() {
-
-                },
-                404 : function() {
-
-                },
-                409 : function() {
                 }
             },
             complete : function(e) {
@@ -164,22 +156,11 @@
             statusCode : {
                 201 : function() {
                     window.location = '/account/surveyor';
-                },
-                400 : function() {
-
-                },
-                500 : function() {
-
-                },
-                404 : function() {
-
-                },
-                409 : function() {
                 }
             },
             complete : function(e) {
                 if (e.status == 201) {
-                    alert("fuck");
+                    alert("Survey Published");
                 }
             }
 
@@ -205,18 +186,6 @@
             statusCode : {
                 200 : function() {
                     window.location = '/signup';
-                },
-                400 : function() {
-
-                },
-                500 : function() {
-
-                },
-                404 : function() {
-
-
-                },
-                409 : function() {
                 }
             },
             complete : function(e) {
@@ -232,28 +201,29 @@
 
 <body>
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-2">
-            <a href="/account/surveyor">Survey Hub</a>
+    <div class="row" style="height: 50px">
+        <div class="col-6 text-center">
+            <a href="/account/surveyor" role="button" class="mdl-button mdl-js-button mdl-js-ripple-effect">Survey Ape</a>
         </div>
-        <div class="col-4"></div>
-        <div class="col-2">
-            <button id="logout" class="btn btn-primary" onclick="logOutLibrarian();">
-            Log Out
+
+        <div class="col-6 text-center">
+            <button id="logout" class="mdl-button mdl-js-button mdl-js-ripple-effect" onclick="logOutLibrarian();">
+                Log Out
             </button>
         </div>
+
     </div>
 
     <div class="row justify-content-center">
         <div class="col-6">
             <form id="questionContent">
-                <fieldset>Add Question</fieldset>
                 <div class="form-group">
                     <label for="surveyType" class="bmd-label-floating">Question Type</label>
                     <select class="form-control" id="surveyType" name="surveyType">
                         <option value="text">Short Answer</option>
-                        <option value="radiogroup">Yes or No</option>
+                        <option value="radio">Yes or No</option>
                         <option value="checkbox">Multiple Choice</option>
+                        <option value="rating">Star</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -274,38 +244,57 @@
 
                 </div>
                 <div class="form-group">
-                    <button type="submit">Add</button>
+                    <button type="submit" class="btn btn-primary float-right">Add Question</button>
                 </div>
             </form>
         </div>
-    </div>
-
-    <div class="row justify-content-center">
         <div class="col-6">
             <form id="invitationForm">
 
-
                 <div class="form-group">
-                    <label for="toEmail" class="bmd-label-floating">Email</label>
+                    <label for="toEmail" class="bmd-label-floating">Invite Email</label>
                     <input type="text" class="form-control" id="toEmail" name="toEmail" />
 
                 </div>
                 <div class="form-group">
-                    <button type="submit" onclick="sendInvitation()">Send Invation</button>
+                    <button type="submit" class="btn btn-primary float-left" onclick="sendInvitation()">Send</button>
+                </div>
+            </form>
+            <form id="publish">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary float-right" onclick="publishSurvey()">Publish</button>
                 </div>
             </form>
         </div>
     </div>
 
+<%--
     <div class="row justify-content-center">
         <div class="col-6">
-            <form id="publish">
+            <form id="invitationForm">
+
                 <div class="form-group">
-                    <button type="submit" onclick="publishSurvey()">Publish</button>
+                    <label for="toEmail" class="bmd-label-floating">Invite Email</label>
+                    <input type="text" class="form-control" id="toEmail" name="toEmail" />
+
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" onclick="sendInvitation()">Send</button>
                 </div>
             </form>
         </div>
     </div>
+--%>
+
+<%--    <div class="row justify-content-center">
+        <div class="col-6">
+            <form id="publish">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" onclick="publishSurvey()">Publish</button>
+                </div>
+            </form>
+        </div>
+    </div>--%>
 
 </div>
 </body>
