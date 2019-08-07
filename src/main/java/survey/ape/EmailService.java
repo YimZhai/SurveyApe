@@ -20,7 +20,7 @@ public class EmailService {
         try {
             MimeMessage mail = mailSender.createMimeMessage();
             mail.setRecipient(Message.RecipientType.TO, new InternetAddress(invitation.getToEmail()));
-            mail.setFrom(new InternetAddress("SurveyApe <chenhanleetcode@gmail.com>"));
+            mail.setFrom(new InternetAddress("SurveyApe <1234@gmail.com>"));
             mail.setSubject(subject);
             mail.setText(content);
             mailSender.send(mail);
@@ -32,7 +32,7 @@ public class EmailService {
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            mimeMessage.setFrom(new InternetAddress("SurveyApe <chenhanleetcode@gmail.com>"));
+            mimeMessage.setFrom(new InternetAddress("SurveyApe <1234@gmail.com>"));
             mimeMessage.setSubject("Verification Information");
             mimeMessage.setText("The verification code is: " + code);
             mailSender.send(mimeMessage);
@@ -44,7 +44,7 @@ public class EmailService {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         try {
             mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            mimeMessage.setFrom(new InternetAddress("SurveyApe <chenhanleetcode@gmail.com>"));
+            mimeMessage.setFrom(new InternetAddress("SurveyApe <1234@gmail.com>"));
             mimeMessage.setSubject("Submit survey Confirmation");
             mimeMessage.setText( "The survey " + surveyId + " has been submitted");
             mailSender.send(mimeMessage);
